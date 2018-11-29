@@ -36,10 +36,10 @@ const ADODBReader = use('ADODBReader')
 async read (filePath) {
     let reader = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
-        reader = new ADODBReader.createReader()
+        reader = new ADODBReader().createReader()
         await reader.connect(filePath)
     } else if (filePath.endsWith('.xls') || filePath.endsWith('.xlsx')) {
-        reader = new ADODBReader.createReader('MSExcel')
+        reader = new ADODBReader().createReader('MSExcel')
         await reader.connect(filePath)
     }
     // Read data
@@ -78,10 +78,10 @@ const ADODBWriter = use('ADODBWriter')
 async changeData () {
     let writer = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
-        writer = new ADODBWriter.createWriter()
+        writer = new ADODBWriter().createWriter()
         await writer.connect(filePath)
     } else if (filePath.endsWith('.xls') || filePath.endsWith('.xlsx')) { // Not support update / delete on Excel file.
-        writer = new ADODB.createWriter('MSExcel')
+        writer = new ADODBWriter().createWriter('MSExcel')
         await writer.connect(filePath)
     }
     
