@@ -1,6 +1,6 @@
 {
   "name": "adonis-adodb",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "The adonisjs adodb package provide some function to read/write data to Access/Excel file base on node-adodb package.",
   "main": "index.js",
   "scripts": {
