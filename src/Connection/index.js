@@ -7,7 +7,6 @@ class ADODBConnection {
     try {
       let connString = await this._genConnectionString(dataSourcePath, passwd)
       if (connString) {
-        console.log('conn string', connString)
         let connection = ADODB.open(connString)
 
         return connection
@@ -27,22 +26,23 @@ class ADODBConnection {
   async _genConnectionString (dataSourcePath, passwd = null) {
     let sourceExist = await this._validateDataSource(dataSourcePath)
     if (sourceExist) {
+      let provider = 'Provider=Microsoft.ACE.OLEDB.12.0;'
       if (dataSourcePath.endsWith('.mdb')) { // Access 2002-2003
         if (passwd !== null) {
-          return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};Jet OLEDB:Database Password=${passwd};`
+          return `${provider}Data Source=${dataSourcePath};Jet OLEDB:Database Password=${passwd};`
         } else {
-          return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};`
+          return `${provider}Data Source=${dataSourcePath};`
         }
       } else if (dataSourcePath.endsWith('.accdb')) { // Access 2007 and later.
         if (passwd !== null) {
-          return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};Jet OLEDB:Database Password=${passwd};`
+          return `${provider}Data Source=${dataSourcePath};Jet OLEDB:Database Password=${passwd};`
         } else {
-          return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};Persist Security Info=False;`
+          return `${provider}Data Source=${dataSourcePath};Persist Security Info=False;`
         }
       } else if (dataSourcePath.endsWith('.xls')) { // Excel 2002-2003
-        return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};Extended Properties="Excel 8.0;HDR=YES";`
+        return `${provider}Data Source=${dataSourcePath};Extended Properties="Excel 8.0;HDR=YES";`
       } else if (dataSourcePath.endsWith('.xlsx')) { // Excel 2007 and later.
-        return `Provider=Microsoft.ACE.OLEDB.12.0;Data Source=${dataSourcePath};Extended Properties="Excel 12.0 Xml;HDR=YES;IMEX=1";`
+        return `${provider}Data Source=${dataSourcePath};Extended Properties="Excel 12.0 Xml;HDR=YES;IMEX=1";`
       } else {
         throw new Error('Invalid format of data source file.')
       }

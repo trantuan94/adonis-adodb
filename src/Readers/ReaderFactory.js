@@ -2,7 +2,7 @@
 const MSAccessReader = require('./MSAccessReader')
 const MSExcelReader = require('./MSExcelReader')
 class ReaderFactory {
-  createReader (type) {
+  static createReader (type) {
     if (type === 'MSExcel') {
       return new MSExcelReader()
     } else {

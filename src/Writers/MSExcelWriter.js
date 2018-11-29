@@ -35,17 +35,12 @@ class MSExcelWriter extends IMSADODBWriter {
               let result = await this.connection.execute(insertQuery)
 
               return result
-            } else {
-              
-              return null
             }
-          } else {
           }
         }
-        return null
-      } else {
-        return null
       }
+
+      return null
     } catch (err) {
       throw err
     }
