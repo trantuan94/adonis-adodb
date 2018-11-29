@@ -8,6 +8,10 @@ Adonis-ADODB package provide some features to work with ADODB on Windows.
 This package support some feature for:
 - Access file (.mdb, .accdb): connect, select, insert, update, delete data.
 - Excel file (.xls, .xlsx): connect and select data.
+## Node/OS Target
+
+This repo/branch is supposed to run fine on Windows 7/8/8.1/10 platforms and targets `Node.js >=8.10`
+
 ## Installation:
 ```
 npm install adonis-adodb
@@ -21,3 +25,36 @@ const providers = [
 ]
 ```
 ## Usage:
+This package provide Reader and Writer class to read and write data from file.
+### Reader
+
+Reader function
+
+|      Function Name           |                  Parameters         |                        Examples                  |               
+| ---------------------------- | ----------------------------------- | ------------------------------------------------ |
+|   readDataFromTable          | tableName: String (required)        |                                                  |
+|                              | conditions: Object (optional)       |  await reader.readDataFromTable('customers', {   |
+|                              |                                     |    $filters: [                                   |
+|                              |                                     |      ...                                         |
+|                              |                                     |    ],                                            |
+|                              |                                     |    $select: {                                    |
+|                              |                                     |      $visible: [                                 |
+|                              |                                     |        ...                                       |
+|                              |                                     |      ],                                          |
+|                              |                                     |      $distinct: true                             |
+|                              |                                     |      $count: '*'                                 |
+|                              |                                     |    },                                            |
+|                              |                                     |   $group: [                                      |
+|                              \                                     |       ...                                        |
+|                              |                                     |    ],                                            |
+|                              |                                     |    $having: {                                    |
+|                              |                                     |      ...                                         |
+|                              |                                     |    },                                            |
+|                              |                                     |    $sort: {                                      |
+|                              |                                     |      ...                                         |
+|                              |                                     |    }                                             |
+|                              |                                     |  })                                              |
+|                              |                                     |                                                  |
+| ---------------------------- | ----------------------------------- | ------------------------------------------------ |
+|                              |                                     |                                                  |
+|   count                      |                                     |                                                  |
