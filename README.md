@@ -1,5 +1,10 @@
 # Adonis-adodb
-Adonis-ADODB package provide some function to work with ADoDB on Windows based on node-adodb package.This package support some feature for:
+Adonis-ADODB package provide some features to work with ADODB on Windows.
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](http://standardjs.com/)
+
+> :pray: This repository is base on node-adodb and only work on Windows, install Microsoft ACE OLEDB 12.0
+
+This package support some feature for:
 - Access file (.mdb, .accdb): connect, select, insert, update, delete data.
 - Excel file (.xls, .xlsx): connect and select data.
 ## Installation:
