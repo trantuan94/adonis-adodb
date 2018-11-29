@@ -74,7 +74,21 @@ class MSExcelReader extends IMSADODBReader {
    * @param {*} options the optional conditions of data want to count.
    */
   async count (tableName, options = {}) {
-    throw new Error('The subclass must be implement this "count" method')
+    let counter = 0
+    tableName = Utils.genExcelName(tableName)
+    if (this.connection) {
+      let queryStr = `SELECT COUNT(*) as total FROM ${tableName}`
+      let whereClause = this.queryBuilder.buildWhereFilter(options)
+      if (whereClause != '') {
+        queryStr += ' WHERE ' + whereClause
+      }
+      counter = await this.query(queryStr)
+      if (counter && counter.length) {
+        return counter[0].total
+      }
+    }
+
+    return counter
   }
 
   /**

@@ -107,7 +107,12 @@ class MSAccessReader extends IMSADODBReader {
   async count (tableName, options = {}) {
     let counter = 0
     if (this.connection) {
-      counter = await this.query(`SELECT COUNT(*) as total FROM ${tableName}`)
+      let queryStr = `SELECT COUNT(*) as total FROM ${tableName}`
+      let whereClause = this.queryBuilder.buildWhereFilter(options)
+      if (whereClause != '') {
+        queryStr += ' WHERE ' + whereClause
+      }
+      counter = await this.query(queryStr)
       if (counter && counter.length) {
         return counter[0].total
       }
