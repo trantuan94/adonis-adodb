@@ -67,7 +67,7 @@ read (filePath) {
 Use count (tableName, conditions) function:
 ```js
     let data = reader.count('products', {
-        status: {$eq: 1} // support same $filters property in conditions parameter of         readDataFromTable function.
+        status: {$eq: 1} // support same $filters property in conditions parameter of readDataFromTable function.
     })
 ```
 ### Writer
