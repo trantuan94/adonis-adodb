@@ -33,7 +33,7 @@ Use readDataFromTable(tableName, conditions) function:
 ```js
 const ADODBReader = use('ADODBReader')
 //...
-read (filePath) {
+async read (filePath) {
     let reader = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
         reader = new ADODBReader.createReader()
@@ -67,15 +67,15 @@ read (filePath) {
 Use count (tableName, conditions) function:
 ```js
     let data = reader.count('products', {
-        status: {$eq: 1} // support same $filters property in conditions parameter of         readDataFromTable function.
+        status: {$eq: 1} // support same $filters property in conditions parameter of readDataFromTable function.
     })
 ```
 ### Writer
-> Create - insert data by Writer
+> Create - Update, Delete data by Writer
 ```js
 const ADODBWriter = use('ADODBWriter')
 // ...
-insertData () {
+async changeData () {
     let writer = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
         writer = new ADODBWriter.createWriter()
@@ -84,6 +84,7 @@ insertData () {
         writer = new ADODB.createWriter('MSExcel')
         await writer.connect(filePath)
     }
+    
     // Insert data
     if (writer) {
         await writer.insert('products', [
@@ -99,12 +100,14 @@ insertData () {
             }
         ]) // INSERT INTO products (code, name, status) VALUES (('0001', 'Product 1', '1'), ('0002', 'Product 2', '0'))
         
+        // Update data (only support Access file.
         await writer.update('products', {
             status: 1 // update status 0 -> 1
         }, {
             code: '0002' with product has code = '0002'
         }) // UPDATE products SET status = 1 WHERE code = '0002'
         
+        // Delete data (Only support Access file.
         await writer.delete('products', {code: '0001'}) // DELETE FROM products WHERE code = '0001'
     }
 }
