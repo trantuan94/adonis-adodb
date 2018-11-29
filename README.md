@@ -33,7 +33,7 @@ Use readDataFromTable(tableName, conditions) function:
 ```js
 const ADODBReader = use('ADODBReader')
 //...
-read (filePath) {
+async read (filePath) {
     let reader = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
         reader = new ADODBReader.createReader()
@@ -75,7 +75,7 @@ Use count (tableName, conditions) function:
 ```js
 const ADODBWriter = use('ADODBWriter')
 // ...
-changeData () {
+async changeData () {
     let writer = null
     if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
         writer = new ADODBWriter.createWriter()
