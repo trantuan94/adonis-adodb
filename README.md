@@ -28,33 +28,85 @@ const providers = [
 This package provide Reader and Writer class to read and write data from file.
 ### Reader
 
-Reader function
+> Read Data:
+Use readDataFromTable(tableName, conditions) function:
+```js
+const ADODBReader = use('ADODBReader')
+//...
+read (filePath) {
+    let reader = null
+    if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
+        reader = new ADODBReader.createReader()
+        await reader.connect(filePath)
+    } else if (filePath.endsWith('.xls') || filePath.endsWith('.xlsx')) {
+        reader = new ADODBReader.createReader('MSExcel')
+        await reader.connect(filePath)
+    }
+    // Read data
+    let data = await reader.readDataFromTable('customers', {
+        $select: ['code', 'name'], // Array| Object -> Sql: SELECT code,name FROM customers.
+        $filters: [ // Array or Object
+            {
+                $or: [
+                    {name: {$like: 'Customer'}}, // name LIKE '%Customer%'
+                    {code: {$dislike: '2%'}} // code NOT LIKE '2%'
+                ]
+            }, // sql clause: (name LIKE '%Customer%' OR code NOT LIKE '2%')
+            {status: {$eq: 1}} // supported operator:$eq, $ne, $like, $in, $nin, $gt, $gte, $lt, $lte, $dislike, 
+        ], // sql: WHERE status = '1' AND (name LIKE '%Customer%' OR code NOT LIKE '2%')
+        $sort: { // Array|Object
+            code: 'desc' // 1/-1 /'asc' / 'desc'
+        } // Sql clause: // ORDER BY code DESC
+    })
+    // SqL query: SELECT code,name FROM customers WHERE status = '1' AND (name LIKE '%Customer%' 
+    // OR code NOT LIKE '2%') ORDER BY code DESC
+    
+}
+```
+> Count data in table:
+Use count (tableName, conditions) function:
+```js
+    let data = reader.count('products', {
+        status: {$eq: 1} // support same $filters property in conditions parameter of         readDataFromTable function.
+    })
+```
+### Writer
+> Create - insert data by Writer
+```js
+const ADODBWriter = use('ADODBWriter')
+// ...
+insertData () {
+    let writer = null
+    if (filePath.endsWith('.mdb') || filePath.endsWith('.accdb')) {
+        writer = new ADODBWriter.createWriter()
+        await writer.connect(filePath)
+    } else if (filePath.endsWith('.xls') || filePath.endsWith('.xlsx')) { // Not support update / delete on Excel file.
+        writer = new ADODB.createWriter('MSExcel')
+        await writer.connect(filePath)
+    }
+    // Insert data
+    if (writer) {
+        await writer.insert('products', [
+            {
+                code: '0001',
+                name: 'Product 1',
+                status: 1
+            },
+            {
+                code: '0002',
+                name: 'Product 2',
+                status: 0
+            }
+        ]) // INSERT INTO products (code, name, status) VALUES (('0001', 'Product 1', '1'), ('0002', 'Product 2', '0'))
+        
+        await writer.update('products', {
+            status: 1 // update status 0 -> 1
+        }, {
+            code: '0002' with product has code = '0002'
+        }) // UPDATE products SET status = 1 WHERE code = '0002'
+        
+        await writer.delete('products', {code: '0001'}) // DELETE FROM products WHERE code = '0001'
+    }
+}
+```
 
-|      Function Name           |                  Parameters         |                        Examples                  |               
-| ---------------------------- | ----------------------------------- | ------------------------------------------------ |
-|   readDataFromTable          | tableName: String (required)        |                                                  |
-|                              | conditions: Object (optional)       |  await reader.readDataFromTable('customers', {   |
-|                              |                                     |    $filters: [                                   |
-|                              |                                     |      ...                                         |
-|                              |                                     |    ],                                            |
-|                              |                                     |    $select: {                                    |
-|                              |                                     |      $visible: [                                 |
-|                              |                                     |        ...                                       |
-|                              |                                     |      ],                                          |
-|                              |                                     |      $distinct: true                             |
-|                              |                                     |      $count: '*'                                 |
-|                              |                                     |    },                                            |
-|                              |                                     |   $group: [                                      |
-|                              \                                     |       ...                                        |
-|                              |                                     |    ],                                            |
-|                              |                                     |    $having: {                                    |
-|                              |                                     |      ...                                         |
-|                              |                                     |    },                                            |
-|                              |                                     |    $sort: {                                      |
-|                              |                                     |      ...                                         |
-|                              |                                     |    }                                             |
-|                              |                                     |  })                                              |
-|                              |                                     |                                                  |
-| ---------------------------- | ----------------------------------- | ------------------------------------------------ |
-|                              |                                     |                                                  |
-|   count                      |                                     |                                                  |
