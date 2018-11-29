@@ -1,4 +1,7 @@
 'use strict'
+/**
+ * Access Writer 
+ */
 const IMSADODBWriter = require('./IMSADODBWriter')
 const ADODBConnection = require('../Connection')
 const QueryBuilder = require('../QueryBuilder')
@@ -20,7 +23,11 @@ class MSAccessWriter extends IMSADODBWriter {
 
     return this
   }
-
+  /**
+   * FUNC: Insert data to table.
+   * @param {String} tableName The name of table want to insert data.
+   * @param {Array|Object} data
+   */
   async insert (tableName, data) {
     try {
       if (this.connection) {
@@ -36,26 +43,22 @@ class MSAccessWriter extends IMSADODBWriter {
               let result = await this.connection.execute(insertQuery)
 
               return result
-            } else {
-              console.log('not have value to insert')
-              return null
             }
-          } else {
-            console.log('not found columns', tableColumns)
           }
-        } else {
-          console.log('not found table')
         }
-        return null
-      } else {
-        console.log('not create connection')
-        return null
       }
+
+      return null
     } catch (err) {
       throw err
     }
   }
-
+  /**
+   * FUNC:
+   * @param {String} tableName The name of table want to update data.
+   * @param {Object} data Update data.
+   * @param {Array|Object} conditions Conditions to get rows want to update
+   */
   async update (tableName, data, conditions) {
     try {
       if (this.connection) {
@@ -72,7 +75,11 @@ class MSAccessWriter extends IMSADODBWriter {
       throw err
     }
   }
-
+  /**
+   * FUNC: Delete rows in table mapped with conditions.
+   * @param {*} tableName 
+   * @param {*} conditions 
+   */
   async delete (tableName, conditions) {
     try {
       if (this.connection) {
@@ -89,7 +96,10 @@ class MSAccessWriter extends IMSADODBWriter {
       throw err
     }
   }
-
+  /**
+   * FUNC: Check table existence.
+   * @param {String} tableName 
+   */
   async existTable (tableName) {
     let table = []
     if (this.connection) {
